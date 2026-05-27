@@ -8,9 +8,10 @@ from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
 
 from keras.models import load_model
-from keras.preprocessing.sequence import pad_sequences
 from keras.layers import Layer
-from keras.preprocessing.text import Tokenizer
+from keras.preprocessing.sequence import pad_sequences
+
+from tensorflow.keras.preprocessing.text import Tokenizer
 
 
 nltk.download('stopwords')
