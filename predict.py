@@ -64,7 +64,10 @@ def clean_text(text):
 TOKENIZER_PATH = "models/tokenizer.pkl"
 MODEL_PATH = "models/fake_news_bilstm_attention.keras"
 
-tokenizer = joblib.load(TOKENIZER_PATH)
+import pickle
+
+with open(TOKENIZER_PATH, "rb") as f:
+    tokenizer = pickle.load(f)
 
 model = load_model(
     MODEL_PATH,
