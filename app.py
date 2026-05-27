@@ -1,5 +1,14 @@
 import streamlit as st
-from predict import predict_news
+try:
+    from predict import predict_news
+
+except Exception as e:
+
+    import streamlit as st
+
+    st.error(f"Model loading error: {e}")
+
+    st.stop()
 
 st.set_page_config(
     page_title="Fake News Detection",
