@@ -9,6 +9,7 @@ from nltk.stem import PorterStemmer
 
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.sequence import pad_sequences
+from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.layers import Layer
 
 nltk.download('stopwords')
@@ -18,8 +19,11 @@ MAX_LENGTH = 500
 stop_words = set(stopwords.words('english'))
 stemmer = PorterStemmer()
 
+
 class AttentionLayer(Layer):
+
     def build(self, input_shape):
+
         self.W = self.add_weight(
             name="attention_weight",
             shape=(input_shape[-1], 1),
@@ -37,18 +41,40 @@ class AttentionLayer(Layer):
         super().build(input_shape)
 
     def call(self, inputs):
-        score = tf.nn.tanh(tf.matmul(inputs, self.W) + self.b)
-        attention_weights = tf.nn.softmax(score, axis=1)
+
+        score = tf.nn.tanh(
+            tf.matmul(inputs, self.W) + self.b
+        )
+
+        attention_weights = tf.nn.softmax(
+            score,
+            axis=1
+        )
+
         context_vector = attention_weights * inputs
-        context_vector = tf.reduce_sum(context_vector, axis=1)
+
+        context_vector = tf.reduce_sum(
+            context_vector,
+            axis=1
+        )
+
         return context_vector
 
+
 def clean_text(text):
+
     text = str(text).lower()
+
     text = re.sub(r'http\S+|www\S+', '', text)
+
     text = re.sub(r'<.*?>', '', text)
+
     text = re.sub(r'\d+', '', text)
-    text = text.translate(str.maketrans('', '', string.punctuation))
+
+    text = text.translate(
+        str.maketrans('', '', string.punctuation)
+    )
+
     text = re.sub(r'\s+', ' ', text).strip()
 
     words = text.split()
@@ -61,23 +87,30 @@ def clean_text(text):
 
     return ' '.join(words)
 
+
 TOKENIZER_PATH = "models/tokenizer.pkl"
+
 MODEL_PATH = "models/fake_news_bilstm_attention.keras"
 
-import pickle
+# LOAD TOKENIZER
+tokenizer = joblib.load(TOKENIZER_PATH)
 
-with open(TOKENIZER_PATH, "rb") as f:
-    tokenizer = pickle.load(f)
-
+# LOAD MODEL
 model = load_model(
     MODEL_PATH,
-    custom_objects={"AttentionLayer": AttentionLayer}
+    custom_objects={
+        "AttentionLayer": AttentionLayer
+    }
 )
 
+
 def predict_news(news_text):
+
     cleaned = clean_text(news_text)
 
-    sequence = tokenizer.texts_to_sequences([cleaned])
+    sequence = tokenizer.texts_to_sequences(
+        [cleaned]
+    )
 
     padded = pad_sequences(
         sequence,
@@ -86,11 +119,22 @@ def predict_news(news_text):
         truncating="post"
     )
 
-    probability = model.predict(padded, verbose=0)[0][0]
+    probability = model.predict(
+        padded,
+        verbose=0
+    )[0][0]
 
-    label = "Real News" if probability >= 0.5 else "Fake News"
+    label = (
+        "Real News"
+        if probability >= 0.5
+        else "Fake News"
+    )
 
-    confidence = probability if probability >= 0.5 else (1 - probability)
+    confidence = (
+        probability
+        if probability >= 0.5
+        else (1 - probability)
+    )
 
     return {
         "label": label,
