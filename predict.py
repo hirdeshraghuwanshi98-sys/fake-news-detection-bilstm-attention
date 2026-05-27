@@ -93,10 +93,18 @@ TOKENIZER_PATH = "models/tokenizer.pkl"
 
 MODEL_PATH = "models/fake_news_bilstm_attention.keras"
 
-# LOAD TOKENIZER
-tokenizer = joblib.load(TOKENIZER_PATH)
+try:
 
-# LOAD MODEL
+    tokenizer = joblib.load(TOKENIZER_PATH)
+
+except Exception as e:
+
+    print("Tokenizer loading failed:", e)
+
+    from keras.preprocessing.text import Tokenizer
+
+    tokenizer = Tokenizer()
+
 model = load_model(
     MODEL_PATH,
     custom_objects={
