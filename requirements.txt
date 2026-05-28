@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 streamlit==1.35.0
 tensorflow-cpu==2.15.1
 keras==2.15.0
@@ -8,3 +9,16 @@ nltk==3.8.1
 plotly==5.22.0
 Pillow==10.3.0
 h5py==3.11.0
+=======
+streamlit
+tensorflow==2.16.1
+keras==3.3.3
+numpy==1.26.4
+pandas==2.2.2
+scikit-learn==1.5.0
+nltk==3.8.1
+joblib==1.4.2
+matplotlib==3.9.0
+seaborn==0.13.2
+h5py
+>>>>>>> e2c3102ceac051588d9766817f208517badc9959

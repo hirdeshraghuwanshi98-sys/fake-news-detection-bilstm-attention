@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Python
 __pycache__/
 *.py[cod]
@@ -45,3 +46,9 @@ logs/
 
 # NLTK
 nltk_data/
+=======
+venv/
+__pycache__/
+.ipynb_checkpoints/
+*.pyc
+>>>>>>> e2c3102ceac051588d9766817f208517badc9959

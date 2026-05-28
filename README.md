@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🔍 FakeScope — Fake News Detection using BiLSTM + Attention
 
 [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://your-app.streamlit.app)
@@ -70,10 +71,27 @@ python train.py --data data/news.csv --epochs 15 --batch 32
 ```
 
 ### 5. Run the app
+=======
+# Fake News Detection Using BiLSTM and Attention
+
+A deep learning NLP project that classifies news articles as Fake or Real using BiLSTM and Attention Mechanism.
+
+## Technologies Used
+- Python
+- TensorFlow
+- Keras
+- NLP
+- Streamlit
+- Scikit-learn
+
+## Run Application
+
+>>>>>>> e2c3102ceac051588d9766817f208517badc9959
 ```bash
 streamlit run app.py
 ```
 
+<<<<<<< HEAD
 ---
 
 ## 📁 Project Structure
@@ -132,3 +150,11 @@ fake-news-detection-bilstm-attention/
 ## 📄 License
 
 MIT © 2024
+=======
+## Features
+- NLP preprocessing
+- BiLSTM model
+- Attention mechanism
+- Real-time prediction
+- Streamlit web app
+>>>>>>> e2c3102ceac051588d9766817f208517badc9959
