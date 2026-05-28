@@ -32,7 +32,6 @@ def clean_text(text):
     return " ".join(lem.lemmatize(w) for w in text.split()
                     if w not in stop and len(w) > 2)
 
-# ---------- build model skeleton matching your saved weights ----------
 def _build_model():
     import tensorflow as tf
     from tensorflow.keras import Input
@@ -66,7 +65,7 @@ def _build_model():
     model = Model(inp, out)
     model.compile(optimizer="adam", loss="binary_crossentropy",
                   metrics=["accuracy"])
-    return model, AttentionLayer
+    return model
 
 _model     = None
 _tokenizer = None
@@ -77,11 +76,10 @@ def _load_artifacts():
         return _model, _tokenizer
     if not os.path.exists(MODEL_PATH) or not os.path.exists(TOKENIZER_PATH):
         raise FileNotFoundError(
-            "Model not found. Run train.py first to generate "
-            f"'{MODEL_PATH}' and '{TOKENIZER_PATH}'."
+            f"Model not found. Please ensure '{MODEL_PATH}' and "
+            f"'{TOKENIZER_PATH}' exist in the repo."
         )
-    model, AttentionLayer = _build_model()
-    # Load weights only — avoids ALL keras version / config conflicts
+    model = _build_model()
     model.load_weights(MODEL_PATH)
     _model = model
     with open(TOKENIZER_PATH, "rb") as f:
@@ -91,9 +89,9 @@ def _load_artifacts():
 def predict(text: str) -> dict:
     from tensorflow.keras.preprocessing.sequence import pad_sequences
     model, tokenizer = _load_artifacts()
-    cleaned  = clean_text(text)
-    seq      = tokenizer.texts_to_sequences([cleaned])
-    padded   = pad_sequences(seq, maxlen=MAX_LEN, padding="post", truncating="post")
+    cleaned   = clean_text(text)
+    seq       = tokenizer.texts_to_sequences([cleaned])
+    padded    = pad_sequences(seq, maxlen=MAX_LEN, padding="post", truncating="post")
     prob_fake = float(model.predict(padded, verbose=0)[0][0])
     prob_real = 1.0 - prob_fake
     label     = "FAKE" if prob_fake >= 0.5 else "REAL"
@@ -104,3 +102,6 @@ def predict(text: str) -> dict:
         "real_prob":    prob_real,
         "cleaned_text": cleaned,
     }
+
+def predict_news(text: str) -> dict:
+    return predict(text)
