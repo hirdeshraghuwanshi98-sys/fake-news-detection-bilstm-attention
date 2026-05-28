@@ -6,7 +6,7 @@ from nltk.stem import WordNetLemmatizer
 
 MODEL_PATH     = os.path.join("models", "bilstm_attention_model.h5")
 TOKENIZER_PATH = os.path.join("models", "tokenizer.pkl")
-MAX_LEN        = 500
+MAX_LEN        = 300
 
 _nltk_ready = False
 def _ensure_nltk():
