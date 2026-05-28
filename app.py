@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 """
 app.py — Fake News Detection · Streamlit Web App
 Production-ready UI with BiLSTM + Attention model inference.
@@ -434,7 +433,7 @@ stopword removal → WordNet lemmatization → tokenization → padding.
 
 **Training data:** LIAR dataset / WELFake / custom labelled corpus.
     """)
-=======
+    
 import streamlit as st
 try:
     from predict import predict_news
@@ -485,4 +484,3 @@ if st.button("Predict"):
 
 st.markdown("---")
 st.caption("Developed by Hirdesh Raghuwanshi")
->>>>>>> e2c3102ceac051588d9766817f208517badc9959
