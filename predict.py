@@ -52,6 +52,7 @@ def _load_artifacts():
         Dropout, SpatialDropout1D, Layer
     )
     import tensorflow.keras.backend as K
+    import h5py
 
     class AttentionLayer(Layer):
         def build(self, input_shape):
@@ -67,37 +68,52 @@ def _load_artifacts():
         def get_config(self):
             return super().get_config()
 
-    # First attempt: full model load with custom objects
+    # Read layer names directly from the .h5 file
+    with h5py.File(MODEL_PATH, "r") as f:
+        if "model_weights" in f:
+            saved_layer_names = list(f["model_weights"].keys())
+        elif "layer_names" in f.attrs:
+            saved_layer_names = [n.decode() if isinstance(n, bytes) else n
+                                 for n in f.attrs["layer_names"]]
+        else:
+            saved_layer_names = []
+
+    # Try full model load first
     try:
         _model = tf.keras.models.load_model(
             MODEL_PATH,
             custom_objects={"AttentionLayer": AttentionLayer},
-            compile=False
+            compile=False,
         )
-    except Exception as e1:
-        # Second attempt: rebuild skeleton + load weights by name
-        try:
-            inp = Input(shape=(MAX_LEN,))
-            x   = Embedding(50000, 128)(inp)
-            x   = SpatialDropout1D(0.2)(x)
-            x   = Bidirectional(LSTM(64, return_sequences=True))(x)
-            x   = AttentionLayer()(x)
-            x   = Dense(64, activation="relu")(x)
-            x   = Dropout(0.5)(x)
-            out = Dense(1, activation="sigmoid")(x)
-            model = Model(inp, out)
-            model.compile(optimizer="adam", loss="binary_crossentropy",
-                          metrics=["accuracy"])
-            model.load_weights(MODEL_PATH, by_name=True, skip_mismatch=True)
-            _model = model
-        except Exception as e2:
-            raise RuntimeError(
-                f"Could not load model.\nAttempt 1: {e1}\nAttempt 2: {e2}"
-            )
+        with open(TOKENIZER_PATH, "rb") as f:
+            _tokenizer = pickle.load(f)
+        return _model, _tokenizer
+    except Exception:
+        pass
+
+    # Build skeleton matching saved layer names exactly
+    has_spatial = any("spatial" in n.lower() for n in saved_layer_names)
+
+    inp = Input(shape=(MAX_LEN,), name="input_layer")
+    x   = Embedding(50000, 128, name="embedding")(inp)
+    if has_spatial:
+        x = SpatialDropout1D(0.2, name="spatial_dropout1d")(x)
+    x   = Bidirectional(LSTM(64, return_sequences=True), name="bidirectional")(x)
+    x   = AttentionLayer(name="attention_layer")(x)
+    x   = Dense(64, activation="relu", name="dense")(x)
+    x   = Dropout(0.5, name="dropout")(x)
+    out = Dense(1, activation="sigmoid", name="dense_1")(x)
+    model = Model(inp, out)
+    model.compile(optimizer="adam", loss="binary_crossentropy",
+                  metrics=["accuracy"])
+
+    model.load_weights(MODEL_PATH, by_name=True, skip_mismatch=True)
+    _model = model
 
     with open(TOKENIZER_PATH, "rb") as f:
         _tokenizer = pickle.load(f)
     return _model, _tokenizer
+
 
 def predict(text: str) -> dict:
     from tensorflow.keras.preprocessing.sequence import pad_sequences
