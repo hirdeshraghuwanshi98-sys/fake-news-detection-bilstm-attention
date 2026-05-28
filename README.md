@@ -70,7 +70,7 @@ python train.py --data data/news.csv --epochs 15 --batch 32
 ```
 
 ### 5. Run the app
-=======
+
 # Fake News Detection Using BiLSTM and Attention
 
 A deep learning NLP project that classifies news articles as Fake or Real using BiLSTM and Attention Mechanism.
@@ -90,7 +90,6 @@ A deep learning NLP project that classifies news articles as Fake or Real using 
 streamlit run app.py
 ```
 
-<<<<<<< HEAD
 ---
 
 ## 📁 Project Structure
@@ -149,7 +148,7 @@ fake-news-detection-bilstm-attention/
 ## 📄 License
 
 MIT © 2024
-=======
+
 ## Features
 - NLP preprocessing
 - BiLSTM model
