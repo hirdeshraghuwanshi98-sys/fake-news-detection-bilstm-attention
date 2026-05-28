@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # 🔍 FakeScope — Fake News Detection using BiLSTM + Attention
 
 [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://your-app.streamlit.app)
@@ -157,4 +156,3 @@ MIT © 2024
 - Attention mechanism
 - Real-time prediction
 - Streamlit web app
->>>>>>> e2c3102ceac051588d9766817f208517badc9959
