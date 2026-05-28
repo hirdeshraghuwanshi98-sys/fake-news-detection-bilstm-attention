@@ -1,0 +1,3 @@
+# Place your training CSV here as news.csv
+# Required columns: text, label (fake/real or 0/1)
+# Optional column: title
