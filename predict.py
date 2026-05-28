@@ -152,6 +152,8 @@ def predict(text: str) -> dict:
         "fake_prob":    prob_fake,
         "real_prob":    prob_real,
         "cleaned_text": cleaned,
+    }
+            
 
 import re
 import string
