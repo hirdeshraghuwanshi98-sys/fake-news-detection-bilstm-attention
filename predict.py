@@ -32,12 +32,24 @@ def clean_text(text):
     return " ".join(lem.lemmatize(w) for w in text.split()
                     if w not in stop and len(w) > 2)
 
-def _build_model():
+_model     = None
+_tokenizer = None
+
+def _load_artifacts():
+    global _model, _tokenizer
+    if _model is not None:
+        return _model, _tokenizer
+    if not os.path.exists(MODEL_PATH) or not os.path.exists(TOKENIZER_PATH):
+        raise FileNotFoundError(
+            f"Model not found. Ensure '{MODEL_PATH}' and '{TOKENIZER_PATH}' exist."
+        )
+
     import tensorflow as tf
     from tensorflow.keras import Input
     from tensorflow.keras.models import Model
     from tensorflow.keras.layers import (
-        Embedding, Bidirectional, LSTM, Dense, Dropout, Layer
+        Embedding, Bidirectional, LSTM, Dense,
+        Dropout, SpatialDropout1D, Layer
     )
     import tensorflow.keras.backend as K
 
@@ -55,33 +67,34 @@ def _build_model():
         def get_config(self):
             return super().get_config()
 
-    inp = Input(shape=(MAX_LEN,))
-    x   = Embedding(50000, 128)(inp)
-    x   = Bidirectional(LSTM(64, return_sequences=True))(x)
-    x   = AttentionLayer()(x)
-    x   = Dense(64, activation="relu")(x)
-    x   = Dropout(0.5)(x)
-    out = Dense(1,  activation="sigmoid")(x)
-    model = Model(inp, out)
-    model.compile(optimizer="adam", loss="binary_crossentropy",
-                  metrics=["accuracy"])
-    return model
-
-_model     = None
-_tokenizer = None
-
-def _load_artifacts():
-    global _model, _tokenizer
-    if _model is not None:
-        return _model, _tokenizer
-    if not os.path.exists(MODEL_PATH) or not os.path.exists(TOKENIZER_PATH):
-        raise FileNotFoundError(
-            f"Model not found. Please ensure '{MODEL_PATH}' and "
-            f"'{TOKENIZER_PATH}' exist in the repo."
+    # First attempt: full model load with custom objects
+    try:
+        _model = tf.keras.models.load_model(
+            MODEL_PATH,
+            custom_objects={"AttentionLayer": AttentionLayer},
+            compile=False
         )
-    model = _build_model()
-    model.load_weights(MODEL_PATH)
-    _model = model
+    except Exception as e1:
+        # Second attempt: rebuild skeleton + load weights by name
+        try:
+            inp = Input(shape=(MAX_LEN,))
+            x   = Embedding(50000, 128)(inp)
+            x   = SpatialDropout1D(0.2)(x)
+            x   = Bidirectional(LSTM(64, return_sequences=True))(x)
+            x   = AttentionLayer()(x)
+            x   = Dense(64, activation="relu")(x)
+            x   = Dropout(0.5)(x)
+            out = Dense(1, activation="sigmoid")(x)
+            model = Model(inp, out)
+            model.compile(optimizer="adam", loss="binary_crossentropy",
+                          metrics=["accuracy"])
+            model.load_weights(MODEL_PATH, by_name=True, skip_mismatch=True)
+            _model = model
+        except Exception as e2:
+            raise RuntimeError(
+                f"Could not load model.\nAttempt 1: {e1}\nAttempt 2: {e2}"
+            )
+
     with open(TOKENIZER_PATH, "rb") as f:
         _tokenizer = pickle.load(f)
     return _model, _tokenizer
