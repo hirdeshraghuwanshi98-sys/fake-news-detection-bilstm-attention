@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 """
 train.py — Train the BiLSTM + Attention fake-news classifier.
 
@@ -198,7 +198,7 @@ if __name__ == "__main__":
     parser.add_argument("--batch",  type=int, default=BATCH_SIZE)
     args = parser.parse_args()
     main(args.data, args.epochs, args.batch)
-=======
+
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -452,4 +452,3 @@ print(classification_report(
 ))
 
 print("Training completed successfully!")
->>>>>>> e2c3102ceac051588d9766817f208517badc9959
