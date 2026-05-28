@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 """
 predict.py — Fake News Detection inference module
 Loads the trained BiLSTM+Attention model and tokenizer, returns predictions.
@@ -153,7 +152,7 @@ def predict(text: str) -> dict:
         "fake_prob":    prob_fake,
         "real_prob":    prob_real,
         "cleaned_text": cleaned,
-=======
+
 import re
 import string
 import joblib
@@ -297,5 +296,4 @@ def predict_news(news_text):
         "label": label,
         "probability_real": float(probability),
         "confidence": float(confidence)
->>>>>>> e2c3102ceac051588d9766817f208517badc9959
     }
