@@ -8,6 +8,15 @@
 A production-ready deep learning NLP system that classifies news articles as **Fake** or **Real** using a **Bidirectional LSTM with Bahdanau Attention Mechanism**.
 
 ---
+# Fake News Detection System
+
+## Dashboard
+
+![Dashboard](dashboard.png)
+
+## Prediction Result
+
+![Prediction](prediction.png)
 
 ## 📌 Features
 
