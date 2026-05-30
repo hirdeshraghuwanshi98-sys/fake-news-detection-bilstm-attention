@@ -1,15 +1,23 @@
 # 🔍 FakeScope — Fake News Detection using BiLSTM + Attention
 
 [![Streamlit App]https://fake-news-detection-bilstm-attention-zz29kggtmsjh3rnr6qcr4n.streamlit.app/
+![Accuracy](https://img.shields.io/badge/Accuracy-97%25-brightgreen)
+![F1 Score](https://img.shields.io/badge/F1--Score-97%25-brightgreen)
 ![Python](https://img.shields.io/badge/Python-3.10-blue)
 ![TensorFlow](https://img.shields.io/badge/TensorFlow-2.15-orange)
-![License](https://img.shields.io/badge/License-MIT-green)
+![Deployed](https://img.shields.io/badge/Deployed-Streamlit%20Cloud-red)
 
-A production-ready deep learning NLP system that classifies news articles as **Fake** or **Real** using a **Bidirectional LSTM with Bahdanau Attention Mechanism**.
+
+A production-ready deep learning NLP system that classifies news articles as Fake or Real using a Bidirectional LSTM with custom Bahdanau Attention Mechanism. Trained on 44,000+ articles, achieving 97% accuracy, precision, recall, and F1-score. Deployed live on Streamlit Cloud with real-time inference under 310ms.
 
 ---
 # Fake News Detection System
-
+## Dataset
+- Source: Kaggle Fake News Dataset
+- Total articles: ~44,000 (Fake + Real combined)
+- Split: 80% train / 20% test (stratified)
+- Label: 0 = Real, 1 = Fake
+ 
 ## Dashboard
 
 ![Dashboard](dashboard.png)
@@ -133,12 +141,15 @@ fake-news-detection-bilstm-attention/
 
 ## 📊 Results
 
-| Metric    | Score  |
-|-----------|--------|
-| Accuracy  | ~97%   |
-| Precision | ~97%   |
-| Recall    | ~97%   |
-| F1-Score  | ~97%   |
+| Metric    | Score |
+|-----------|-------|
+| Accuracy  | 97%   |
+| Precision | 97%   |
+| Recall    | 97%   |
+| F1-Score  | 97%   |
+| Inference | <310ms|
+| Vocab Size| 50,000 tokens |
+| Train Size| ~35,000 articles |
 
 *(Results depend on dataset used for training)*
 
@@ -154,13 +165,3 @@ fake-news-detection-bilstm-attention/
 
 ---
 
-## 📄 License
-
-MIT © 2024
-
-## Features
-- NLP preprocessing
-- BiLSTM model
-- Attention mechanism
-- Real-time prediction
-- Streamlit web app
