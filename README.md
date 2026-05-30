@@ -1,6 +1,6 @@
 # 🔍 FakeScope — Fake News Detection using BiLSTM + Attention
 
-[![Streamlit App]https://fake-news-detection-bilstm-attention-zz29kggtmsjh3rnr6qcr4n.streamlit.app/
+[![Streamlit App](https://fake-news-detection-bilstm-attention-zz29kggtmsjh3rnr6qcr4n.streamlit.app/)
 ![Python](https://img.shields.io/badge/Python-3.10-blue)
 ![TensorFlow](https://img.shields.io/badge/TensorFlow-2.15-orange)
 ![License](https://img.shields.io/badge/License-MIT-green)
